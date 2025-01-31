@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            margin: 0;
+            background: #f6f8fc;
+            position: relative;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #e0e0e0;
+            padding: 15px;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar div {
+            padding: 12px;
+            margin: 5px 0;
+            cursor: not-allowed;
+            font-weight: bold;
+        }
+
+        .mails {
+            cursor: pointer;
+            background: #c0c0c0;
+            border-radius: 5px;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            background: white;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            border-radius: 8px;
+        }
+
+        .email-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .email-body {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .reply-section {
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+        }
+
+        .reply-message {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .access-denied {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            display: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div>Inbox</div>
+        <div>Sent</div>
+        <div>Drafts</div>
+        <div class="mails" style="cursor: pointer;">Mails</div>
+        <div>Spam</div>
+    </div>
+    <div class="content">
+        <div class="email-header">
+            <strong>From:</strong> You <small><i>
+                    < er.walkenhurst@novonne.student >
+                </i></small><br>
+            <strong>Subject:</strong> Bio-cybernetic tissue interface project
+        </div>
+        <div class="email-body">
+            Dear Dr. Lawson,<br>
+            I have been researching the nano-technology integration into organic cells for my bio-cybernetic course. I
+            requested some assistance from '36 alumni Liam Vitessen and Maya K. Miller. I would be honored if you can
+            look into this. I feel like I am on track to create a very good work, but I deeply admire your experience and 
+            expertise, and would love to hear from you.<br>
+            I am very proud of this project so far, and your lectures was no small part to inspire it.
+            <br><br>
+            Much appreciated,<br>
+            Erasmus Walkenhurst.<br><br>
+
+            <u style="color: blue;">[nano_tech_cell_integration.pdf]</u>
+        </div>
+        <div class="reply-section">
+            <strong>Kormac Lawson</strong> <small><i>
+                    < k.lawson@novonne >
+                </i></small>
+            <div class="reply-message">
+                Mr. Walkenhurst,<br>
+                I have been reviewing your project on bio-cybernetic tissue interfaces. As far as my experience allows
+                me to tell, you are on track to create a great publication. If this can go out of embargo, you ma
+                become the youngest author to reach 100 citations in the field. Of course, I hold the previous record, but I 
+                myself would cite this study if it comes to fruition. <br><br>
+                For more detailed discussions, meet me and Dr. Calloway at LAB-007 tomorrow, after lunch. I will set up the 
+                experimentation environment. This is, again, excellent work even for Novonne standards.
+                <br><br>
+                
+                Looking forward to our meeting,<br>
+                Dr. Kormac Lawson
+            </div>
+        </div>
+
+
+    </div>
+    <div class="access-denied" id="accessDenied">ACCESS DENIED</div>
+    <script>
+        document.querySelectorAll('.sidebar div:not(.mails)').forEach(el => {
+            el.addEventListener('click', () => {
+                const accessDenied = document.getElementById('accessDenied');
+                accessDenied.style.display = 'block';
+                setTimeout(() => {
+                    accessDenied.style.display = 'none';
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+
+</html>

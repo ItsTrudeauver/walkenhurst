@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Reenie+Beanie&display=swap" rel="stylesheet">
+    <style>
+        /* Basic layout */
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar */
+        nav ul {
+            list-style: none;
+            padding: 10px 0;
+            background-color: #333;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Content */
+        #content {
+            padding: 20px;
+            margin: 0 auto;
+            width: 80%;
+        }
+
+        /* Diary Page Style */
+        /* Paper texture background */
+        .diary-page {
+            background: #fffef6;
+            padding: 40px;
+            max-width: 800px;
+            margin: 20px auto;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+            background-image:
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0) 3%),
+                repeating-linear-gradient(0deg,
+                    rgba(255, 255, 255, 0.9),
+                    rgba(255, 255, 255, 0.9) 29px,
+                    #ddd 30px,
+                    #ddd 30px);
+            line-height: 30px;
+            border: 1px solid #e1dcd0;
+            transform: rotate(0.5deg);
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        /* Reveal effect */
+        .diary-page.revealed {
+            opacity: 1;
+        }
+
+        /* Aged paper effect */
+        .diary-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/png;base64,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');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* Torn edge effect */
+        .diary-page::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 5%;
+            right: 5%;
+            height: 20px;
+            background: #f4f4f4;
+            clip-path: polygon(0% 0%, 5% 100%, 10% 0%, 15% 100%, 20% 0%, 25% 100%, 30% 0%, 35% 100%, 40% 0%, 45% 100%, 50% 0%, 55% 100%, 60% 0%, 65% 100%, 70% 0%, 75% 100%, 80% 0%, 85% 100%, 90% 0%, 95% 100%, 100% 0%);
+            filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+        }
+
+        /* Ink bleed effect */
+        .diary-text {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 1.8em;
+            color: #2a2a2a;
+            line-height: 1.8;
+            margin: 15px 0;
+            position: relative;
+            text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+        }
+
+        .diary-text::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 10%;
+            width: 80%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.1), transparent);
+        }
+
+        /* Random ink spots */
+        .diary-page:hover::before {
+            background-image:
+                radial-gradient(circle at 10% 15%, rgba(0, 0, 0, 0.05) 1%, transparent 2%),
+                radial-gradient(circle at 90% 85%, rgba(0, 0, 0, 0.05) 1%, transparent 2%),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0) 3%),
+                repeating-linear-gradient(0deg,
+                    rgba(255, 255, 255, 0.9),
+                    rgba(255, 255, 255, 0.9) 29px,
+                    #ddd 30px,
+                    #ddd 30px);
+        }
+
+        /* Date styling */
+        .date {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 1.5em;
+            color: #666;
+            margin-bottom: 30px;
+            text-align: right;
+            position: relative;
+            padding-right: 20px;
+        }
+
+        .date::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: -5px;
+            width: 50px;
+            height: 2px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+
+
+        /* Footer */
+        #footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Got Into Novonne!</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+
+<body>
+    <!-- Navbar Content -->
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/pages/journal.html">Journals</a></li>
+            <li><a href="/pages/test-log.html">Test Logs</a></li>
+            <li><a href="/pages/diary.html">Diaries</a></li>
+            <li><a href="/pages/emails.html">Emails</a></li>
+        </ul>
+    </nav>
+
+    <div id="content">
+        <div class="content-header">
+            <h1>Novonne's Newbie</h1>
+            <p class="date">2034</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    I’m here. This place is crazy. Everyone is talking about ‘bio-cybernetics’ and ‘neural networks,’
+                    and honestly, I don’t even know half of what they’re saying. We’re studying things like neural
+                    implants and digital consciousness transfer—stuff I read about in textbooks, but now it’s real. I
+                    think I understand it in theory, but practically? It’s overwhelming. I tried asking Dr. Harrison
+                    today about bio-organic interfaces, but I think he could tell I didn’t know enough yet. He was kind,
+                    though. Everyone’s kind. Even if they seem like they know everything, they’re willing to help. I’m
+                    not sure if I belong, but I’m trying to catch up.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="content-header">
+            <h1>Two Months</h1>
+            <p class="date">2034</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    I’m getting used to this place. It’s insane how much information we have to absorb. But something
+                    clicked today in class when Dr. Lawson started talking about biocompatible materials in cybernetics.
+                    I finally understand why neural interfaces need specific biological materials to avoid rejection.
+                    The way he explained it—kind of like how the body adapts to organ transplants—was something I could
+                    visualize. It’s hard to focus when I’m so tired all the time, though. I never thought that studying
+                    could be this exhausting. But I guess that’s what they want, right? Push me until I can keep up. I’m
+                    gonna get there. Maybe not yet, but soon. But for now, I might spend a bit of time for this really
+                    cool game Liam gave me.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="content-header">
+            <h1>Half-a-year from Home</h1>
+            <p class="date">2035</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    I’ve been here for almost half a year. The fatigue is still there, but it’s not as bad anymore. I’m
+                    starting to understand things better. I even worked with Maya on a bio-cybernetic project today—how
+                    to enhance prosthetic limbs with AI-driven neural interfaces. I didn’t feel like a kid today. I felt
+                    like I was contributing. Dr. Harrison gave me some reading on ‘neuroplasticity in integrated
+                    systems.’ It’s all connected—bio and tech, like neurons and circuits working together. The way they
+                    interface is what’s gonna make us break through. It feels like I’m in the right place.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="content">
+        <div class="content-header">
+            <h1>Maybe I'm a part of this, after all?</h1>
+            <p class="date">2035</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    I finally get it. I had this conversation with Dr. Lawson today about something he was working on:
+                    merging human consciousness with digital systems. It sounded so far out, like science fiction, but
+                    the more I thought about it, the more I realized that it’s possible. We talked about neuro-digital
+                    interfaces and how the brain can adapt to digital signals, almost like learning a new language. I
+                    think I’m starting to see the bigger picture now. It’s not just bio-cybernetics anymore; it’s about
+                    connecting everything—biology, consciousness, and tech. Maybe I can make a real contribution. I
+                    don’t know where this will go, but I’m excited. I think I’m ready for this.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="content-header">
+            <h1>I'm a part of this, after all.</h1>
+            <p class="date">2035</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    I think I’m starting to fit in here. My project on bio-cybernetic tissue interfaces is making
+                    progress. We’re testing new methods for integrating nanotech with organic cells. Dr. Lawson said I
+                    was on track to create something groundbreaking. I know it’s not finished, but it feels like it
+                    could be something huge. Maya and Liam helped me work through some of the more complex aspects of
+                    the project—biomolecular bonding, signal transmission. I couldn’t have done it without them. But I
+                    don’t just rely on them anymore. I’m finally thinking independently. I’ve still got a lot to learn,
+                    but for the first time, it feels like I’m not just playing catch-up. I’m contributing. I’m part of
+                    this.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="content">
+        <div class="content-header">
+            <h1>Progress.</h1>
+            <p class="date">2036</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    I spent all day working on my neural digitalization proposal. We’ve been exploring the potential of
+                    neural pathways for uploading consciousness into digital systems. I know it sounds crazy, but I
+                    believe we’re getting closer. There’s this theory I’ve been developing with Dr. Harrison about
+                    merging the synaptic processes of the human brain with advanced AI’s processing speed. It’s like
+                    creating a hybrid mind that combines the best of both. I’m beginning to think this is the future of
+                    both bio-cybernetics and neural digitalization. I’m so close to cracking it. The project is taking a
+                    lot of my time, but I can’t stop. I’m addicted to figuring this out.
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="content">
+        <div class="content-header">
+            <h1>Graduation</h1>
+            <p class="date">2036</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    Liam and Maya are graduating. They've helped me a lot, so I cannot bear to not attend and say
+                    goodbye face to face. There's every chance we'll see each other again though. After all, they have
+                    amazing work
+                    ethic and intelligence. I am sure they will land really big jobs in major biotech corporations, and
+                    I hope I will too, so we can co-research again. But, I will miss their visits dearly. I cannot
+                    believe
+                    I'm saying this, but I loved being coddled by them both. Good luck, big sis and big bro.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="content">
+        <div class="content-header">
+            <h1>A Star Is Born.</h1>
+            <p class="date">2037</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    I’m finishing up my neural digitalization preliminary research now. The process of uploading
+                    consciousness to a digital form doesn’t feel so far out anymore. I’m presenting my findings to the
+                    professors tomorrow.
+                    Dr. Lawson says it’s some of the best work he’s seen in years. I feel proud. I’m not sure I expected
+                    to get here this fast. But I’m not done. There’s still so much to do. Now that I’ve learned how far
+                    we can go with merging biology and tech, I want to explore deeper—understanding consciousness, not
+                    just as a biological phenomenon, but as something we can manipulate digitally. I’m working with some
+                    of the best researchers here, but I feel like I’ve only scratched the surface.
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="footer">
+        <p>&copy; 2057 Walkenhurst Archives</p>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            document.querySelectorAll('.diary-page').forEach((entry, index) => {
+                if (index === 0) {
+                    entry.style.opacity = '1';
+                    entry.style.transform = 'translateY(0)';
+                }
+            });
+            const entries = document.querySelectorAll(".diary-page");
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("revealed");
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            entries.forEach((entry, index) => {
+                if (index !== 0) {
+                    observer.observe(entry);
+                }
+            });
+        });
+    </script>
+    <script src="/assets/js/script.js"></script>
+    <a href="diary2.html">
+        <div id="previousButton">Middle School</div>
+      </a>
+      <a href="diary4.html">
+        <div id="nextButton">Higher Studies</div>
+      </a>
+</body>
+
+</html>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Reenie+Beanie&display=swap" rel="stylesheet">
+    <style>
+        /* Basic layout */
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar */
+        nav ul {
+            list-style: none;
+            padding: 10px 0;
+            background-color: #333;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Content */
+        #content {
+            padding: 20px;
+            margin: 0 auto;
+            width: 80%;
+        }
+
+        /* Diary Page Style */
+        /* Paper texture background */
+        .diary-page {
+            background: #fffef6;
+            padding: 40px;
+            max-width: 800px;
+            margin: 20px auto;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+            background-image:
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0) 3%),
+                repeating-linear-gradient(0deg,
+                    rgba(255, 255, 255, 0.9),
+                    rgba(255, 255, 255, 0.9) 29px,
+                    #ddd 30px,
+                    #ddd 30px);
+            line-height: 30px;
+            border: 1px solid #e1dcd0;
+            transform: rotate(0.5deg);
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        /* Reveal effect */
+        .diary-page.revealed {
+            opacity: 1;
+        }
+
+        /* Aged paper effect */
+        .diary-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/png;base64,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');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* Torn edge effect */
+        .diary-page::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 5%;
+            right: 5%;
+            height: 20px;
+            background: #f4f4f4;
+            clip-path: polygon(0% 0%, 5% 100%, 10% 0%, 15% 100%, 20% 0%, 25% 100%, 30% 0%, 35% 100%, 40% 0%, 45% 100%, 50% 0%, 55% 100%, 60% 0%, 65% 100%, 70% 0%, 75% 100%, 80% 0%, 85% 100%, 90% 0%, 95% 100%, 100% 0%);
+            filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+        }
+
+        /* Ink bleed effect */
+        .diary-text {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 1.8em;
+            color: #2a2a2a;
+            line-height: 1.8;
+            margin: 15px 0;
+            position: relative;
+            text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+        }
+
+        .diary-text::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 10%;
+            width: 80%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.1), transparent);
+        }
+
+        /* Random ink spots */
+        .diary-page:hover::before {
+            background-image:
+                radial-gradient(circle at 10% 15%, rgba(0, 0, 0, 0.05) 1%, transparent 2%),
+                radial-gradient(circle at 90% 85%, rgba(0, 0, 0, 0.05) 1%, transparent 2%),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0) 3%),
+                repeating-linear-gradient(0deg,
+                    rgba(255, 255, 255, 0.9),
+                    rgba(255, 255, 255, 0.9) 29px,
+                    #ddd 30px,
+                    #ddd 30px);
+        }
+
+        /* Date styling */
+        .date {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 1.5em;
+            color: #666;
+            margin-bottom: 30px;
+            text-align: right;
+            position: relative;
+            padding-right: 20px;
+        }
+
+        .date::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: -5px;
+            width: 50px;
+            height: 2px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+
+
+        /* Footer */
+        #footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>So It Begins</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+
+<body>
+    <!-- Navbar Content -->
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/pages/journal.html">Journals</a></li>
+            <li><a href="/pages/test-log.html">Test Logs</a></li>
+            <li><a href="/pages/diary.html">Diaries</a></li>
+            <li><a href="/pages/emails.html">Emails</a></li>
+        </ul>
+    </nav>
+
+    <div id="content">
+        <div class="content-header">
+            <h1>I'm Killing It!</h1>
+            <p class="date">2039</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    Today, I showed Dr. Li and Dr. Sorrentino my updated neural map. The way they looked at it—like it
+                    was something truly new—was enough to make me feel good about it. They’ve always supported me. Dr.
+                    Pereira even gave me the go-ahead to take on a solo project. They’re trusting me with more and more
+                    of the work. It’s strange. I know I’m capable. But sometimes I wonder if they’re seeing something in
+                    my work that I’m not seeing myself. Everyone talks about how fast I’m catching up to the older
+                    students. But I never really think of it like that. I’m just doing what feels right. I feel like I’m
+                    starting to understand where the gaps are in our knowledge. It’s strange—sometimes it seems like no
+                    one wants to fill them. But I’m ready. I have to push past the ideas people cling to.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="content-header">
+            <h1>Cutting Edge Advancements</h1>
+            <p class="date">2039</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    I had a breakthrough today. Dr. Li was skeptical at first, but when I demonstrated the new process
+                    for synaptic digitalization, I could see her eyes light up. It’s funny—no one’s talked about this
+                    yet. We’ve been so focused on artificial augmentation that no one’s really considered full
+                    integration with biological systems. I feel like I’m starting to think in ways no one else is. It’s
+                    exhausting at times, trying to keep up with the workload and research, but it’s worth it. There’s
+                    this sense of clarity I can’t explain. I don’t know how to explain it to anyone else. Sometimes I
+                    get the feeling they’re still trying to catch up to me. But that’s okay. I’m not in a hurry. I just
+                    want to keep learning. And maybe—just maybe—somewhere in all of this, I’ll find something that
+                    answers the questions no one else is asking.
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="content">
+        <div class="content-header">
+            <h1>Can I Push Harder?</h1>
+            <p class="date">2040</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    I’m starting to feel the weight of it all. Not the research—no, the research is exhilarating—but the
+                    pace. There’s an intensity to this life that never seems to let up. I spend more time in labs than I
+                    do sleeping, and it’s as if time itself is a luxury I’m no longer allowed. The breakthroughs come at
+                    the cost of hours spent squinting at screens, making calculations, trying to push the boundaries of
+                    what we know.
+
+                    The faculty here are incredible. Dr. Vantag and Dr. Griffiths, they keep pushing me further. They
+                    challenge everything I think I know, and I’ve come to appreciate that. If it weren’t for their
+                    constant questions, I don’t know where I’d be.
+
+                    I’ve been working on refining the neural interface model. We’re so close to understanding how to map
+                    and sync individual synapses with external systems—truly a monumental step toward real neural
+                    digitalization. But there’s still something I can’t quite get right. I know I’ll crack it. It’s
+                    just... exhausting.
+
+                    No one talks about the fatigue that comes with this kind of work. The people around me—they see me
+                    as a prodigy, but what they don’t see is the toll it takes. There’s always more to do, and I wonder
+                    sometimes if I’m really pushing the limits or just skimming the surface. Maybe it’s both.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="content">
+        <div class="content-header">
+            <h1>I Understand It Now</h1>
+            <p class="date">2040</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    I’m starting to feel the weight of it all. Not the research—no, the research is exhilarating—but the
+                    pace. There’s an intensity to this life that never seems to let up. I spend more time in labs than I
+                    do sleeping, and it’s as if time itself is a luxury I’m no longer allowed. The breakthroughs come at
+                    the cost of hours spent squinting at screens, making calculations, trying to push the boundaries of
+                    what we know.
+
+                    The faculty here are incredible. Dr. Vantag and Dr. Griffiths, they keep pushing me further. They
+                    challenge everything I think I know, and I’ve come to appreciate that. If it weren’t for their
+                    constant questions, I don’t know where I’d be.
+
+                    I’ve been working on refining the neural interface model. We’re so close to understanding how to map
+                    and sync individual synapses with external systems—truly a monumental step toward real neural
+                    digitalization. But there’s still something I can’t quite get right. I know I’ll crack it. It’s
+                    just... exhausting.
+
+                    No one talks about the fatigue that comes with this kind of work. The people around me—they see me
+                    as a prodigy, but what they don’t see is the toll it takes. There’s always more to do, and I wonder
+                    sometimes if I’m really pushing the limits or just skimming the surface. Maybe it’s both.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="content-header">
+            <h1>Was At The Cafe</h1>
+            <p class="date">2040</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    I’d been wrestling with this problem for hours. Nothing I did seemed to work. I adjusted the
+                    variables, I rechecked the assumptions, but it just wouldn’t align. The data was slipping through my
+                    fingers like water.I hadn’t noticed the barista bringing my coffee at first.
+
+                    When I finally looked up, she was finishing her shift. She packed 
+                    up her things behind the counter, moving with that practiced efficiency, 
+                    and I quickly focused back to my work, still lost in the numbers.
+
+                    She closed up, went behind the counter, and grabbed her stuff to leave. I was so focused on the
+                    problem, I barely heard her footsteps when she walked past me and out the door.
+
+                    But just before she left, she glanced at the screen—just a quick look—and muttered something under
+                    her breath.
+
+                    "Huh, thought it was point fourty-nine. Guess not."
+
+                    I felt my heart jump. I hadn’t expected that. It was such a small thing, just a number. But
+                    how could she have known? The answer was so specific. It was like she had seen my calculations, but
+                    how could she have? I stared at the screen, trying to wrap my mind around it. It's a mess on here I
+                    lose track time to time.
+
+                    I was about to call out to her, ask her how she knew, but... that would’ve been awkward. Would have
+                    been creepy even, asking a barista on her closing shift about
+                    biotech mathematics.
+
+
+                    But as she walked out the door, something caught my eye. I didn't mean to look, I still haven't
+                    really made sense of it all. Anyway, I saw her student ID clipped to her bag—just
+                    visible as she passed. My gaze lingered for a moment before I realized what I was seeing. It was a
+                    Novonne ID card. I froze. I didn’t even need to read the name. I had seen the numbers on the ID. She
+                    was two years
+                    younger than me. Why would someone that brilliant need this barista job? She could go freelancing
+                    for any company. She's a Novonne product, like I am, like Liam and Maya.
+
+                    I looked back at the screen, still barely processing what had just happened. The number she
+                    muttered, the
+                    casualness of it... It didn’t make sense. When I revisited the calculations, I plugged 0.49 in,
+                    instead of 0.52, just as a hailmary.
+
+                    I sat back and stared blankly at the screen. The results were exact. To a hundredth decimal. How? 
+                    She saw my screen for a few seconds at most. Was it the reflections in my glasses? No,
+                    don't be ridiculous. I was messy and tired then so I overlooked this problem, still I doubt any 
+                    ordinary Novonne student could just do that.
+
+                    I didn’t know what to make of it, but I couldn’t shake the feeling that I had just witnessed
+                    something extraordinary."
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="content-header">
+            <h1>It Was Odd.</h1>
+            <p class="date">2040</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    The more I think about that moment, the less I understand. Eleanor (I think that’s her name—just
+                    pieced it together from the ID card) didn’t seem out of place. She was a Novonne student, sure, but
+                    why would she even be paying attention to my work?
+
+                    But that number. It’s stayed with me.
+
+                    It made everything fall into place. In a way, it felt almost too perfect. I should’ve been annoyed.
+                    After all, it was just some barista’s observation. But for whatever reason, it made sense. I did the
+                    calculations over and over again, and each time, the numbers matched.
+
+                    Was I looking too deeply into it? Perhaps. But that moment of clarity, that sudden realignment of
+                    everything I’d been trying to do, felt like something more than coincidence.
+
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="content">
+        <div class="content-header">
+            <h1>I am a public figure?</h1>
+            <p class="date">2040</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    I’m starting to realize something—something I’m not sure I want to admit. I’m not just a top
+                    researcher anymore. I’m moving into a new realm of influence. People are starting to see me as one
+                    of the great minds in the field. And that scares me more than it excites me.
+
+                    I’ve been reflecting a lot on where I am in my work. The progress I’ve made has been monumental, but
+                    sometimes I wonder if I’ve lost something along the way.
+
+                    I was in a meeting with some of the top people at Luminex Biotech today. There was a moment when I
+                    caught myself, realizing just how much I’ve climbed in this field. Dr. Toland was talking about some
+                    new project he wanted me to be a part of—neural integration, next-generation interfaces—and I felt a
+                    surge of pride. It’s strange, how far I’ve come.
+
+                    It’s also strange how the universe works. Eleanor—remember her?—she’s here now too, at the company.
+                    I couldn’t have expected that. It’s been almost two years since that café encounter, and I hadn’t
+                    seen her once since then. She walked into the office like she belonged, no surprise in her step.
+                    She’s younger, sure, but there’s a sharpness about her that makes me believe we’re not so different.
+
+                    Still, she has her own path. Her own projects. I’m not sure if we’ll ever work together, but there’s
+                    something in the way she challenges ideas that I find intriguing.
+
+                    What did I see that day in the café? Was it just a coincidence, or is there more to it? I haven’t
+                    figured that out yet. But I think I’m beginning to realize that I’m not the only one pushing
+                    boundaries here.
+
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="footer">
+        <p>&copy; 2057 Walkenhurst Archives</p>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            document.querySelectorAll('.diary-page').forEach((entry, index) => {
+                if (index === 0) {
+                    entry.style.opacity = '1';
+                    entry.style.transform = 'translateY(0)';
+                }
+            });
+            const entries = document.querySelectorAll(".diary-page");
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("revealed");
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            entries.forEach((entry, index) => {
+                if (index !== 0) {
+                    observer.observe(entry);
+                }
+            });
+        });
+    </script>
+    <script src="/assets/js/script.js"></script>
+    <a href="diary3.html">
+        <div id="previousButton">So It Begins</div>
+    </a>
+
+    </a>
+</body>
+
+</html>

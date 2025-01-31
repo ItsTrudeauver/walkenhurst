@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Reenie+Beanie&display=swap" rel="stylesheet">
+    <style>
+        /* Basic layout */
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar */
+        nav ul {
+            list-style: none;
+            padding: 10px 0;
+            background-color: #333;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Content */
+        #content {
+            padding: 20px;
+            margin: 0 auto;
+            width: 80%;
+        }
+
+        /* Diary Page Style */
+        /* Paper texture background */
+        .diary-page {
+            background: #fffef6;
+            padding: 40px;
+            max-width: 800px;
+            margin: 20px auto;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+            background-image:
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0) 3%),
+                repeating-linear-gradient(0deg,
+                    rgba(255, 255, 255, 0.9),
+                    rgba(255, 255, 255, 0.9) 29px,
+                    #ddd 30px,
+                    #ddd 30px);
+            line-height: 30px;
+            border: 1px solid #e1dcd0;
+            transform: rotate(0.5deg);
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        /* Reveal effect */
+        .diary-page.revealed {
+            opacity: 1;
+        }
+
+
+        /* Aged paper effect */
+        .diary-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/png;base64,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');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* Torn edge effect */
+        .diary-page::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 5%;
+            right: 5%;
+            height: 20px;
+            background: #f4f4f4;
+            clip-path: polygon(0% 0%, 5% 100%, 10% 0%, 15% 100%, 20% 0%, 25% 100%, 30% 0%, 35% 100%, 40% 0%, 45% 100%, 50% 0%, 55% 100%, 60% 0%, 65% 100%, 70% 0%, 75% 100%, 80% 0%, 85% 100%, 90% 0%, 95% 100%, 100% 0%);
+            filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+        }
+
+        /* Ink bleed effect */
+        .diary-text {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 1.8em;
+            color: #2a2a2a;
+            line-height: 1.8;
+            margin: 15px 0;
+            position: relative;
+            text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+        }
+
+        .diary-text::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 10%;
+            width: 80%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.1), transparent);
+        }
+
+        /* Random ink spots */
+        .diary-page:hover::before {
+            background-image:
+                radial-gradient(circle at 10% 15%, rgba(0, 0, 0, 0.05) 1%, transparent 2%),
+                radial-gradient(circle at 90% 85%, rgba(0, 0, 0, 0.05) 1%, transparent 2%),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0) 3%),
+                repeating-linear-gradient(0deg,
+                    rgba(255, 255, 255, 0.9),
+                    rgba(255, 255, 255, 0.9) 29px,
+                    #ddd 30px,
+                    #ddd 30px);
+        }
+
+        /* Date styling */
+        .date {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 1.5em;
+            color: #666;
+            margin-bottom: 30px;
+            text-align: right;
+            position: relative;
+            padding-right: 20px;
+        }
+
+        .date::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: -5px;
+            width: 50px;
+            height: 2px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+
+
+        /* Footer */
+        #footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Middle School</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+
+<body>
+    <!-- Navbar Content -->
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/pages/journal.html">Journals</a></li>
+            <li><a href="/pages/test-log.html">Test Logs</a></li>
+            <li><a href="/pages/diary.html">Diaries</a></li>
+            <li><a href="/pages/emails.html">Emails</a></li>
+        </ul>
+    </nav>
+
+    <div id="content">
+        <div class="content-header">
+            <h1>Group Math</h1>
+            <p class="date">2031</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    Dear diary,<br>
+                    So we had this group math thing today. James was like, 'I think I got it,' but he didn't show his
+                    work, so I asked how he did it. He was like, 'Oh, just guessed it.' I told him that's not how it
+                    works. I mean, how did he even guess? I tried to show everyone how you gotta break it down, you
+                    know, step-by-step. Ms. S. saw me doing it and smiled. She’s the best, she always says it's good to
+                    ask questions. I think the others were just annoyed tho. I liked it tho, I get why it’s important to
+                    show each part.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="content-header">
+            <h1>Fitting in?</h1>
+            <p class="date">2031</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    Dear diary,<br>
+                    Everyone was talking about some movie at lunch. I didn’t watch it, but I guess I should’ve. They all
+                    seemed to get what was happening in the movie, but I didn’t. Like, how do they know all the lines?
+                    Do they watch it more than once? I was like, okay, but I wonder what makes them laugh about it. Is
+                    it the story or something in it? I guess I could watch it too... I just don’t get why they care
+                    about the characters. I like movies, but I think I look at them different, like... I think it’s all
+                    fake, but it's fun to think about how they made it real. I guess it’s kinda like science. Maybe I’ll
+                    talk about it next time. They all like when I explain stuff.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="content-header">
+            <h1>Science Club</h1>
+            <p class="date">2031</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    Dear diary,<br>
+                    So, in Science Club, I was showing off my circuit thing to the others. Some of them just wanted to
+                    mess with the wires, but I had to see how they all connected, like how the electrons really move.
+                    They didn’t get it, but Mr. T. said it was cool that I could explain it. He said I should ‘keep
+                    thinking like that.’ That made me feel good. I told the guys I was thinking about how the electrons
+                    might go faster if we used a different material for the wires. They said I was 'getting too
+                    complicated' but I think it might work
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="content-header">
+            <h1>Math Test</h1>
+            <p class="date">2032</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    Dear diary,<br>
+                    We had this math test today. It was hard at first, but when I looked at the question, I was like,
+                    okay, I know how to break it down. I told Mr. Ellis the way I figured it out, step-by-step. He said
+                    I should explain more often ‘cause it shows how everything fits together. But I don’t think the
+                    others liked me explaining all of it. I just want them to understand too, y'know? It’s not about
+                    just getting the answer, it's about knowing how it works from the start. Sometimes I think they get
+                    annoyed, but I don’t want to leave anything out.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="content-header">
+            <h1>Sci-fi</h1>
+            <p class="date">2032</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    Dear diary,<br>
+                    I was reading this book everyone was talking about—it's called Space Adventures. It's about a robot
+                    and a kid saving the world, or whatever. It’s fun, but I keep wondering if robots could really do
+                    that. Like, they never talk about how robots learn to think, they just do. I thought that was funny.
+                    I guess I don’t care that it’s fake, it’s just cool to imagine what it would be like if robots could
+                    think. I think I’d like it if they were real. I mean, I could probably make one smarter. Not a
+                    robot, exactly, but maybe something that can think better. I don’t know... Just seems like a fun
+                    idea.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="content-header">
+            <h1>The Letter</h1>
+            <p class="date">2032</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    Got a letter from Novonne today! I still can’t believe I actually got in. When I opened the letter,
+                    I felt a little scared, but also excited. Ms. Sinclair says it’s a big deal, and I don’t want to let
+                    anyone down. I think I’m ready, but I don’t know if I’ll fit in. I mean, everyone there is supposed
+                    to be really smart. But I think I can keep up. I’m gonna work harder. I just hope I don't mess
+                    things up. Maybe I’ll meet new people. I wonder if they like the same stuff I do. Ah, I don’t really
+                    care if they do, I just want to learn everything I can. I still have time to prepare.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="content-header">
+            <h1>Being Smart Is Cool?</h1>
+            <p class="date">2033</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    Dear diary,
+                    Today in class, I explained this thing about math to the others. They were asking how I did it, and
+                    I think they were impressed? I’m not sure, some of them were quiet. I think it’s good to show how I
+                    got the answer, even though some of them said it was too much. But Mr. Ellis said it was good I was
+                    explaining it, not just saying ‘this is the answer.’ It feels weird, though. I like explaining, but
+                    sometimes I feel like the other kids don’t want to know as much. I can’t help it though. It’s just
+                    how I think.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="content-header">
+            <h1>Making Friends</h1>
+            <p class="date">2032</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    Dear diary,
+                    I met some kids at lunch who are into this game called The Last Mission. I don’t play it much, but
+                    they told me it’s about strategy and problem-solving, and I guess that’s what I like. They were
+                    talking about the levels and how to beat them, but I was more curious about how the game works. They
+                    said I was ‘thinking too much.’ Maybe I should try playing it for fun, but I don’t really like doing
+                    stuff unless I understand why it works the way it does. I think they like me, though. They say I ask
+                    a lot of ‘smart’ questions. I don't know if that's a good thing.
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="footer">
+        <p>&copy; 2057 Walkenhurst Archives</p>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll('.diary-page').forEach((entry, index) => {
+                if (index === 0) {
+                    entry.style.opacity = '1';
+                    entry.style.transform = 'translateY(0)';
+                }
+            });
+            const entries = document.querySelectorAll(".diary-page");
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("revealed");
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            entries.forEach((entry, index) => {
+                if (index !== 0) {
+                    observer.observe(entry);
+                }
+            });
+        });
+    </script>
+    <script src="/assets/js/script.js"></script>
+    <a href="diary1.html">
+        <div id="previousButton">Middle School</div>
+      </a>
+      <a href="diary3.html">
+        <div id="nextButton">Got Into Novonne!</div>
+      </a>
+</body>
+
+</html>

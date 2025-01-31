@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>no use.</title>
+    <style>
+        /* Add these new styles */
+        .text-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: black;
+            color: lime;
+            overflow: hidden;
+            white-space: pre;
+            font-family: monospace;
+            font-size: 0.2vw;
+            display: none;
+            z-index: 1001;
+            pointer-events: none;
+        }
+
+        .visible {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .final-frame {
+            color: red;
+            animation: tremble 0.1s infinite;
+        }
+
+        @keyframes tremble {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            50% { transform: translateX(2px); }
+            75% { transform: translateX(-2px); }
+            100% { transform: translateX(0); }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            margin: 0;
+            background: #f6f8fc;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #e0e0e0;
+            padding: 15px;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar div {
+            padding: 12px;
+            margin: 5px 0;
+            cursor: not-allowed;
+            font-weight: bold;
+        }
+
+        .mails {
+            cursor: pointer;
+            background: #c0c0c0;
+            border-radius: 5px;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            background: white;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            border-radius: 8px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .crash {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: black;
+            z-index: 1000;
+            animation: crashEffect 1.5s ease-out forwards;
+        }
+
+        @keyframes crashEffect {
+            0% { background: rgba(255, 0, 0, 0.9); transform: scale(1); }
+            15% { background: rgba(0, 0, 0, 0.9); transform: scale(1.05); }
+            30% { background: rgba(255, 255, 255, 0.9); filter: invert(1) blur(3px); }
+            50% { background: rgba(0, 0, 0, 1); transform: rotate(0deg) scale(1.2); filter: contrast(2) blur(5px); }
+            70% { background: rgba(255, 0, 0, 1); transform: scale(1.5) skew(5deg, 5deg); }
+            100% { background: black; transform: scale(1); }
+        }
+
+        .screen-tear {
+            position: absolute;
+            width: 100vw;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            animation: tearEffect 0.1s infinite;
+        }
+
+        @keyframes tearEffect {
+            0% { transform: translateY(0) skewX(10deg); }
+            50% { transform: translateY(5px) skewX(-10deg); }
+            100% { transform: translateY(0) skewX(10deg); }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div>Inbox</div>
+        <div>Sent</div>
+        <div>Drafts</div>
+        <div class="mails" style="cursor: pointer;">Mails</div>
+        <div>Spam</div>
+    </div>
+    <div class="content">
+        <div class="email-header"></div>
+        <div class="email-body"></div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            setTimeout(() => {
+                let crashScreen = document.createElement('div');
+                crashScreen.classList.add('crash');
+                document.body.appendChild(crashScreen);
+
+                // Add screen tears
+                for (let i = 0; i < 5; i++) {
+                    let tear = document.createElement('div');
+                    tear.classList.add('screen-tear');
+                    tear.style.top = `${Math.random() * 100}vh`;
+                    document.body.appendChild(tear);
+                }
+
+                // After crash animation ends
+                crashScreen.addEventListener('animationend', () => {
+                    setTimeout(async () => {
+                        // Load and parse text frames
+                        try {
+                            const response = await fetch('eyes.txt');
+                            const textData = await response.text();
+                            const frames = textData.split(/==FRAME \d+==/).slice(1);
+                            
+                            // Set up text animation
+                            const textContainer = document.createElement('div');
+                            textContainer.className = 'text-animation visible';
+                            document.body.appendChild(textContainer);
+
+                            let currentFrame = 0;
+                            textContainer.textContent = frames[currentFrame].trim();
+
+                            // Start animation loop
+                            const interval = setInterval(() => {
+                                currentFrame++;
+                                if (currentFrame >= frames.length - 1) {
+                                    clearInterval(interval); // Stop the loop
+                                    textContainer.textContent = frames[currentFrame].trim();
+                                    textContainer.classList.add('final-frame'); // Add red color and tremble effect
+                                } else {
+                                    textContainer.textContent = frames[currentFrame].trim();
+                                }
+                            }, 300); // Adjust interval for animation speed
+                            
+                        } catch (error) {
+                            console.error('Error loading animation frames:', error);
+                        }
+                    }, 2000); // 2 second delay after crash
+                });
+            }, 2000); // Initial 2 second delay
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            margin: 0;
+            background: #f6f8fc;
+            position: relative;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #e0e0e0;
+            padding: 15px;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar div {
+            padding: 12px;
+            margin: 5px 0;
+            cursor: not-allowed;
+            font-weight: bold;
+        }
+
+        .mails {
+            cursor: pointer;
+            background: #c0c0c0;
+            border-radius: 5px;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            background: white;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            border-radius: 8px;
+        }
+
+        .email-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .email-body {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .reply-section {
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+        }
+
+        .reply-message {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .access-denied {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            display: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div>Inbox</div>
+        <div>Sent</div>
+        <div>Drafts</div>
+        <div class="mails" style="cursor: pointer;">Mails</div>
+        <div>Spam</div>
+    </div>
+    <div class="content">
+        <div class="email-header">
+            <strong>From:</strong> Novonne Institute of Experimental Research & Science <small><i>< novonne@recruitment ></i></small><br>
+            <strong>Subject:</strong> Invitation letter
+        </div>
+        <div class="email-body">
+            Dear Mr. Walkenhurst,
+            <br><br>
+            After careful review of your interview and discussions with your school teachers, we are delighted to inform
+            you that you have been selected for our biotechnology programme. Your enthusiasm for knowledge is evident,
+            but more importantly, you have demonstrated the tenacity to understand, analyze, deconstruct, and
+            reconstruct complex information—hallmarks of exceptional academic ability. We could not overlook such
+            talent, even considering your younger-than-usual admission age.
+
+            Given your unique circumstances, we encourage you to take your time in consulting your parents and teachers
+            to determine the most suitable enrollment period. This letter of acceptance will remain valid indefinitely.
+            <br><br>
+            We look forward to seeing you develop your skills in scientific research at Novonne. Our institute provides
+            comprehensive support for students, including tuition coverage, allowances, dietary accommodations, and
+            state-of-the-art dormitories. In return, we expect dedication, openness to new ideas, and a collaborative
+            spirit. At Novonne, we are committed to advancing the frontiers of science and technology, and we are
+            confident that your potential will be nurtured and guided to flourish.
+
+            We hope to welcome you soon.
+            <br><br>
+            Best regards,
+            <br>
+            Allan Jottesen<br>
+            Director of Recruitment
+        </div>
+        
+    </div>
+    <div class="access-denied" id="accessDenied">ACCESS DENIED</div>
+    <script>
+        document.querySelectorAll('.sidebar div:not(.mails)').forEach(el => {
+            el.addEventListener('click', () => {
+                const accessDenied = document.getElementById('accessDenied');
+                accessDenied.style.display = 'block';
+                setTimeout(() => {
+                    accessDenied.style.display = 'none';
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+
+</html>

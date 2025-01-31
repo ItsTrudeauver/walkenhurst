@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            margin: 0;
+        }
+        .sidebar {
+            width: 250px;
+            background: #e0e0e0;
+            padding: 15px;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        .sidebar div {
+            padding: 12px;
+            margin: 5px 0;
+            cursor: not-allowed;
+            font-weight: bold;
+        }
+
+        .mails {
+            cursor: pointer;
+            background: #bbb;
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .email-item {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .email-item:hover {
+            background: #eee;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div>Inbox</div>
+        <div>Sent</div>
+        <div>Drafts</div>
+        <div class="mails" style="cursor: pointer;">Mails</div>
+        <div>Spam</div>
+    </div>
+    <div class="content">
+        <div class="email-item" onclick="openEmail('/data/emails/email21.html')">To Board of Directors</div>
+        <div class="email-item" onclick="openEmail('/data/emails/email13.html')">Break-through methods</div>
+        <div class="email-item" onclick="openEmail('/data/emails/email12.html')">To: Eleanor Ashcroft</div>
+        <div class="email-item" onclick="openEmail('/data/emails/email11.html')">Formal Interview Request</div>
+        <div class="email-item" onclick="openEmail('/data/emails/email10.html')">Your publication is gaining traction!</div>
+        <div class="email-item" onclick="openEmail('/data/emails/email9.html')">Neural Digitalization Preliminary Research</div>
+        <div class="email-item" onclick="openEmail('/data/emails/email8.html')">Novonne Higher Studies Registration</div>
+        <div class="email-item" onclick="openEmail('/data/emails/email7.html')">Graduation Ceremony for Class '36</div>
+        <div class="email-item" onclick="openEmail('/data/emails/email6.html')">To: Mr. Lawson</div>
+        <div class="email-item" onclick="openEmail('/data/emails/email5.html')">Biotechnology Assignment: Freshman Research</div>
+        <div class="email-item" onclick="openEmail('/data/emails/email4.html')">To: Mr. Ellis</div>
+        <div class="email-item" onclick="openEmail('/data/emails/email3.html')">Biotechnology Research Peer Study</div>
+        <div class="email-item" onclick="openEmail('/data/emails/email2.html')">Novonne Registration</div>
+        <div class="email-item" onclick="openEmail('/data/emails/email1.html')">Formal Invitation</div>
+    </div>
+    <script>
+        function openEmail(email) {
+            window.location.href = email;
+        }
+        
+        document.querySelectorAll('.sidebar div:not(.mails)').forEach(el => {
+            el.addEventListener('click', () => {
+                const accessDenied = document.getElementById('accessDenied');
+                accessDenied.style.display = 'block';
+                setTimeout(() => {
+                    accessDenied.style.display = 'none';
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>

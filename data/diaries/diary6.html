@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Reenie+Beanie&display=swap" rel="stylesheet">
+    <style>
+        /* Basic layout */
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar */
+        nav ul {
+            list-style: none;
+            padding: 10px 0;
+            background-color: #333;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Content */
+        #content {
+            padding: 20px;
+            margin: 0 auto;
+            width: 80%;
+        }
+
+        /* Diary Page Style */
+        /* Paper texture background */
+        .diary-page {
+            background: #fffef6;
+            padding: 40px;
+            max-width: 800px;
+            margin: 20px auto;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+            background-image:
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0) 3%),
+                repeating-linear-gradient(0deg,
+                    rgba(255, 255, 255, 0.9),
+                    rgba(255, 255, 255, 0.9) 29px,
+                    #ddd 30px,
+                    #ddd 30px);
+            line-height: 30px;
+            border: 1px solid #e1dcd0;
+            transform: rotate(0.5deg);
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        /* Reveal effect */
+        .diary-page.revealed {
+            opacity: 1;
+        }
+
+        /* Aged paper effect */
+        .diary-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/png;base64,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');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* Torn edge effect */
+        .diary-page::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 5%;
+            right: 5%;
+            height: 20px;
+            background: #f4f4f4;
+            clip-path: polygon(0% 0%, 5% 100%, 10% 0%, 15% 100%, 20% 0%, 25% 100%, 30% 0%, 35% 100%, 40% 0%, 45% 100%, 50% 0%, 55% 100%, 60% 0%, 65% 100%, 70% 0%, 75% 100%, 80% 0%, 85% 100%, 90% 0%, 95% 100%, 100% 0%);
+            filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+        }
+
+        /* Ink bleed effect */
+        .diary-text {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 1.8em;
+            color: #2a2a2a;
+            line-height: 1.8;
+            margin: 15px 0;
+            position: relative;
+            text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+        }
+
+        .diary-text::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 10%;
+            width: 80%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.1), transparent);
+        }
+
+        /* Random ink spots */
+        .diary-page:hover::before {
+            background-image:
+                radial-gradient(circle at 10% 15%, rgba(0, 0, 0, 0.05) 1%, transparent 2%),
+                radial-gradient(circle at 90% 85%, rgba(0, 0, 0, 0.05) 1%, transparent 2%),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0) 3%),
+                repeating-linear-gradient(0deg,
+                    rgba(255, 255, 255, 0.9),
+                    rgba(255, 255, 255, 0.9) 29px,
+                    #ddd 30px,
+                    #ddd 30px);
+        }
+
+        /* Date styling */
+        .date {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 1.5em;
+            color: #666;
+            margin-bottom: 30px;
+            text-align: right;
+            position: relative;
+            padding-right: 20px;
+        }
+
+        .date::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: -5px;
+            width: 50px;
+            height: 2px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+
+
+        /* Footer */
+        #footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Merge</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+
+<body>
+    <!-- Navbar Content -->
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/pages/journal.html">Journals</a></li>
+            <li><a href="/pages/test-log.html">Test Logs</a></li>
+            <li><a href="/pages/diary.html">Diaries</a></li>
+            <li><a href="/pages/emails.html">Emails</a></li>
+        </ul>
+    </nav>
+
+    <div id="content">
+        <div class="content-header">
+            <h1>They can't fool me</h1>
+            <p class="date">2048</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    I can already see the interest stirring. First it was Luminex Biotech. Then it was Oculus Ltd. I’m
+                    not stupid—I know what’s coming. They want to use my work for control. They’ve been pushing,
+                    pulling, trying to turn what I’ve done into a tool of influence. I had hoped they’d leave it at
+                    simple medical applications, maybe for the elderly, for terminal patients. That was my dream.
+
+                    But no. They see something bigger. The military is already showing interest. They want to control
+                    minds, to upload soldiers into a permanent state of readiness, free from the weaknesses of the
+                    flesh. The thought makes me sick, but I can't walk away from this. The work is too important now.
+                    Too critical to humanity’s future. Or so they tell me.
+
+                    I’ve lost something in the process. I can feel it. But I can’t stop now. There’s no going back.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="content-header">
+            <h1>A new world</h1>
+            <p class="date">2048</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    Today, I met with the Oculus people. They have their sights set on an entirely different frontier.
+                    It’s not just about uploading minds anymore. It’s about creating an entirely new reality—a world
+                    within the digital landscape that can house not only uploaded minds but the constructs of society
+                    itself. I wasn’t prepared for this.
+
+                    They want to build something akin to a ‘new world,’ a virtual utopia. But who controls it? Who owns
+                    the digital afterlife? They don’t say it, but I know that’s where this is headed. They want total
+                    control, and they think I can help them make that a reality.
+
+                    I don’t like the idea. The morality of it eats at me, but I can’t stop. I’ve given too much of
+                    myself to this. The research is too far along, and the potential is... beyond what I ever imagined.
+                    I think of it as a godlike power, one that can fix everything. But that’s where they’ve got it
+                    wrong. It isn’t a solution—it’s a trap.
+
+                    I’ve got to be careful. I know there’s a line I can’t cross. But I think I’ve already crossed it.
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="content">
+        <div class="content-header">
+            <h1>Deal's done</h1>
+            <p class="date">2049</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    The deal is done. Oculus has brought in the military, and now the work is fully in their hands. I
+                    can’t shake the feeling that I’ve sold my soul.
+
+                    They call it “The Grid.” A digital consciousness network. Once, it was about understanding the human
+                    mind. Now, it’s about surveillance, control, manipulation. I can see the fear in the eyes of the
+                    people around me—the scientists, the military officers—but no one dares to speak up. They’re all too
+                    scared to lose their place at the table.
+
+                    I should have seen this coming. I should have known. But I didn't. The greed, the thirst for power,
+                    it all blindsided me.
+
+                    And now, as I watch them build The Grid, I know it’s only a matter of time before they use it to
+                    enforce control. They won’t stop. They’ll keep expanding, keep harvesting minds until there’s
+                    nothing left of individuality.
+
+                    I still don’t know what happened to Eleanor. The last I heard, she was working on a different part
+                    of the project, but now... I don’t know. We haven’t spoken in months. I don’t think I want to.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="content">
+        <div class="content-header">
+            <h1>Should have listened</h1>
+            <p class="date">2040</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    The Eye. That’s what they’re calling it now. Oculus’ new brand. The totalitarian surveillance system
+                    has fully integrated the Ascendancy Grid. Now it’s not just about controlling the minds of soldiers.
+                    It’s about controlling society itself. Everyone’s thoughts, actions, emotions—all monitored,
+                    analyzed, influenced.
+
+                    I knew they would do this. I knew it, deep down, but I didn’t stop them. I couldn’t. The temptation,
+                    the allure of power—it’s too great. And now I’m trapped.
+
+                    I’ve become a cog in the machine. The very thing I warned against. The Eye will control
+                    everything—every action, every thought. It’s omnipresent. I’ve seen it in the faces of the subjects
+                    in The Grid. Their freedom is gone. They no longer think for themselves. They’ve become data.
+
+                    And still, I don’t know what happened to Eleanor. She’s been quiet. She’s been silent. I’ve heard
+                    whispers—people say she’s been involved with The Eye, or perhaps she’s disappeared entirely. I don’t
+                    know. Maybe she was right all along.
+
+                    Maybe I should have listened.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="content-header">
+            <h1>Eleanor</h1>
+            <p class="date">2050</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    They've done it. They've got Eleanor. "Resigned" my foot. They've gotten a hold of her. Her
+                    instincts—no, her analyses in '43 was right. This is all my fault. If only I had looked beyond my
+                    obsession for progress.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="content-header">
+            <h1>i understand it now</h1>
+            <p class="date">2051</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text">
+                    I understand now.
+
+                    The Eye. The Grid. It was never about progress. It was never about understanding the human mind. It
+                    was about control. Absolute, unyielding control.
+
+                    I wish I could take it all back. 
+                    But I can’t.
+
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="content">
+        <div class="content-header">
+            <h1>I can't.</h1>
+            <p class="date">2051</p>
+        </div>
+        <div class="content-body">
+            <div class="diary-page">
+
+                <p class="diary-text" style="color: #fffef6;">
+                    there are 7 entries
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="footer">
+        <p>&copy; 2057 Walkenhurst Archives</p>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            document.querySelectorAll('.diary-page').forEach((entry, index) => {
+                if (index === 0) {
+                    entry.style.opacity = '1';
+                    entry.style.transform = 'translateY(0)';
+                }
+            });
+            const entries = document.querySelectorAll(".diary-page");
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("revealed");
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            entries.forEach((entry, index) => {
+                if (index !== 0) {
+                    observer.observe(entry);
+                }
+            });
+        });
+    </script>
+    <script src="/assets/js/script.js"></script>
+    <a href="diary3.html">
+        <div id="previousButton"></div>
+    </a>
+
+    </a>
+</body>
+
+</html>
